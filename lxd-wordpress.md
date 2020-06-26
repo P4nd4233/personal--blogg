@@ -17,7 +17,7 @@ Bellow we can see a simple diagram of the setup we are going to use.
 
 ### #1 LXD Host
 #### Ubuntu 20.04 LTS Server (Local IP 172.16.1.10)
-The LXD Host will run the containters and orchestrate the whole thing.
+The LXD Host will run the containers and orchestrate the whole thing.
 ### #2 Nginx container (IP: 10.240.244.190)
 The nginx server will act as a reverse proxy - port forward between the host and the container bridge
 ### #3 Apache container (IP: 10.240.244.97)
@@ -31,8 +31,8 @@ To install lxd run:
 ```
 $ sudo apt-get install lxd -y
 ```
-Choose the latest version if you get prompted <br>
-Make sure that you are part of the lxd group
+If you get prompted, choose the latest version. <br>
+Make sure that you are part of the `lxd` group,
 ```
 $ id
 uid=1000(ivan) gid=1000(ivan) groups=1000(ivan),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),115(lxd)
@@ -55,11 +55,16 @@ Would you like LXD to be available over the network? (yes/no) [default=no]: no
 Would you like stale cached images to be updated automatically? (yes/no) [default=yes] yes
 Would you like a YAML "lxd init" preseed to be printed? (yes/no) [default=no]: no
 ```
-Ofcourse you can choose other options, tweak the networking, i am leaving it to default. <br>
-The storage pool option is very imporant, you can store the containers to a directory or to a different volume. We can create sperate LVM, and assign it to a [storage pool](https://linuxcontainers.org/lxd/docs/master/storage).
-Storing to a dedicated LVM gives more flexibility, because you can backup more easily ,make the whole infrastructure portable, replicate it across different hosts.
-I am going to choose the deafult option - dir, it is also a good one.
+Of course you can choose other options, tweak the networking, i am leaving it to default. <br>
+The storage pool option is very important, you can store the containers in a directory or in a different volume. We can create sperate LVM, and assign it to a [storage pool](https://linuxcontainers.org/lxd/docs/master/storage).
+Storing in a dedicated LVM gives more flexibility, because you can backup more easily ,make the whole infrastructure portable, replicate it across different hosts.
+I am going to choose the default option - dir.
 The last option about YAML can be used to create homogeneous enviroment where there are many LXD hosts and you dont't need to go set them up one by one.
+
+## The `Dir` backend
+
+>While this backend is fully functional, it's also much slower than all the others due to it having to unpack images or do instant copies of instances, snapshots and images.
+>Quotas are supported with the directory backend when running on either ext4 or XFS with project quotas enabled at the filesystem level.
 
 OK, now lets checkout the network situation, we saw above that a new adapter (lxdbr0) was created
 ```
@@ -85,7 +90,7 @@ $ ip a
     inet6 fe80::34ef:50ff:fe5e:1f90/64 scope link 
        valid_lft forever preferred_lft forever
 ```
-and indeed lxdbr0 is created, BUT that doesn't mean it is configured, we will come to this later.<br>
+And indeed lxdbr0 is created, BUT that doesn't mean it is configured, we will come to this later.<br>
 Now lets install the containers themselves.
 
 Linux Containers is like Docker, in terms of images, there is a centralized repository (in Ubuntu there is specific Canonical Repo too)
@@ -96,11 +101,11 @@ $ lxc image list images:
 ```
 That way we get a long list of images available, we can add `| grep 'something'` to narrow it down...<br>
 
-We have chosen an image(Ubuntu focal in our case), to 'get' it we can either specify the FINGERPRINT or its ALIAS, we will use the fingerprint
+We have chosen an image(Ubuntu focal in our case), to fetch it we can either specify the FINGERPRINT or its ALIAS, we will use the fingerprint
 ```
 $ lxc init images:30c3adc18d77 nginx
 ```
-when the image has finished downloading we can list the available containters
+When the image finishes downloading we can list the available containters
 ```
 $ lxc ls
 +-------+---------+------+------+-----------+-----------+
@@ -132,7 +137,7 @@ At this part the things were pretty straightforward. Now
 to install nginx instide the container we must interact with it.
 To do so run `$ lxc exec nginx -- bash`
 Now we get dropped inside a root shell in the container itself.
-To install nginx we run
+To install nginx we run:
 ```
 apt-get install nginx -y; systemctl enable --now nginx
 ```
@@ -146,9 +151,9 @@ We can add a proxy device to the nginx container. <br>
 Well ok, BUT we are not done, if we take a look at `/var/log/nginx/access.log`<br>
 we can see the following: `127.0.0.1 - - [25/Jun/2020:21:03:20 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.58.0"`
 That is bad, the logging is broken, we access the site from the outside, but it show that it is from localhost.<br>
-That's because nginx is unaware that it is being port forwarded, lets fix that...
+That's because nginx is unaware of the proxy, lets fix that...
 `$ lxc config device set nginx proxy-device proxy_protocol=true`<br>
-and in the container lets edit the nginx config file `/etc/nginx/sites-available/default`. We should put the following at the `server { ... }` directive
+and in the container lets edit the nginx configuration file `/etc/nginx/sites-available/default`. We should put the following at the `server { ... }` directive
 ```
  server {
 		listen  80 proxy_protocol;
@@ -159,7 +164,7 @@ and in the container lets edit the nginx config file `/etc/nginx/sites-available
      set_real_ip_from 127.0.0.1; # any internal request will trust the header of the set
 
 ```
-and now we can `nginx -t` to test the config. If everything is ok we can run `systemctl restart nginx`
+Now we can run `nginx -t` to test the configuration. If everything is ok we can run `systemctl restart nginx`
 
 Now if we take a look at the access.log we can now see the real client ip address
 
@@ -169,7 +174,7 @@ $ lxc exec nginx -- tail -f /var/log/nginx/access.log
 ==> /var/log/nginx/access.log <==
 172.16.1.20 - - [25/Jun/2020:21:36:34 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.65.3"
 ```
-### OK,but we are not done yet...
+### Configuring the Proxy
 
 Lets install apache2 inside it's container, lets run `apt-get install apache2 -y ; systemctl enable --now apache2`
 Now we have to forward nginx to apache. In nginx container, lets add the following to `/etc/nginx/sites-available/default` inside the `server { ... }` directive
@@ -202,9 +207,9 @@ LogFormat "%a %l %u %t \"%r\" %>s %O" common
 LogFormat "%{Referer}i -> %U" referer
 LogFormat "%{User-agent}i" agent
 ```
-change the %h on line `213` and `214` to %a
+Change the %h on line `213` and `214` to %a
 
-and add the `RemoteIPHeader` (last 2 lines) to `/etc/apache2/sites-available/000-default.conf`
+and lets add `RemoteIPHeader` and `RemoteIPInternalProxy` (the last 2 lines from bellow) to `/etc/apache2/sites-available/000-default.conf`
 
 ```
 <VirtualHost *:80>
@@ -221,7 +226,7 @@ and add the `RemoteIPHeader` (last 2 lines) to `/etc/apache2/sites-available/000
 ```
 and last run `a2enmod remoteip; systemctl restart apache2`
 
-we can check out the logs and see that both apache and nginx are logging information correctly
+We can check out the logs and see that both apache and nginx are logging information correctly
 
 ```
 $ lxc exec nginx -- tail -f /var/log/nginx/access.log /var/log/nginx/error.log
@@ -241,7 +246,7 @@ fd42:a868:c39b:3ff9:216:3eff:fed7:7b24 - - [25/Jun/2020:22:08:52 +0000] "GET / H
 172.16.1.20 - - [25/Jun/2020:22:08:53 +0000] "GET / HTTP/1.0" 200 11192 "-" "curl/7.65.3"
 ```
 * * *
-### Done with the proxies, now lets configure mariadb
+### Done with the proxy, now lets configure MariaDB
 ```
 lxc exec mariadb -- bash
 apt-get install mariadb-server -y
@@ -257,7 +262,7 @@ then `systemctl restart mariadb`
 * * *
 ### Lets configure Apache for WordPress
 
-> We can attach a volume to the container's `/var/www/html` because, if something goes wrong and we have to delete the container, the WordPress installation will stay intact. In my case I will not do that, but it is a good practice.
+> We can attach a volume to the container's `/var/www/html` directory, because if something goes wrong and we have to delete the container, the WordPress installation will stay intact. In my case I will not do that, but it is a good practice.
 
 ```
 apt-get install wget unzip -y
@@ -268,7 +273,8 @@ chown -R www-data:www-data /var/www/html/
 apt-get install -y php-curl php-gd php-mbstring php-xml php-xmlrpc php-soap php-intl php-zip php libapache2-mod-php php-mysql
 ```
 
-vim /etc/apache2/sites-available/000-default.conf 
+Lets change the document root in Apache to the WordPress directory, and also allow permalinks for WordPress.
+Edit `/etc/apache2/sites-available/000-default.conf`
 
 ```
 DocumentRoot /var/www/html/wordpress
@@ -311,7 +317,7 @@ Now everything should be good to go ...<br>
 
 ### It Works!
 
-now lets get through the initial setup
+Now lets get through the initial setup
 
 <a href="pics/lxd-wp/pic3.png" target="_blank"><img src="pics/lxd-wp/pic3.png"></a>
 <a href="pics/lxd-wp/pic4.png" target="_blank"><img src="pics/lxd-wp/pic4.png"></a>

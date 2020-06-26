@@ -71,7 +71,7 @@ Couldn't find any privilage escalation vectors.
 <br>I have spend a lot of time going around in circles. At this point I started trying out everything i could think of. <br>
 I googled FuelCMS Database Configuration and found out [this article](https://www.codeigniter.com/user_guide/database/configuration.html) <br>
 They were talking about the MySQL DB, and I assume the app needs to talk with the DB, to do so it need to get authenticated with the DB using some kind of credentials...
-I have read that the configuration file is stored int app/config/database.php. <br>
+I have read that the configuration file is stored in app/config/database.php. <br>
 At first i couldn't find it, so i ran a quick `find`.
 ```
 $ find / -name database.php 2>/dev/null
