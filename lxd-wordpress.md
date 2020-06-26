@@ -13,7 +13,7 @@ In our case we will use Ubuntu 20.04 LTS Server as the container host.
 Bellow we can see a simple diagram of the setup we are going to use.
 >TL;DR; <br>This definitely is not a production ready or ultra secure setup, it is for demonstration purposes on what we can do with LXD and containerization in general.
 
-<a href="/pics/lxd-wp/diagram1.png" target="_blank"><img src="/pics/lxd-wp/diagram1.png" /></a>
+<a href="pics/lxd-wp/diagram1.png" target="_blank"><img src="pics/lxd-wp/diagram1.png" /></a>
 
 ### #1 LXD Host
 #### Ubuntu 20.04 LTS Server (Local IP 172.16.1.10)
@@ -307,19 +307,19 @@ Now everything should be good to go ...<br>
 * * *
 ## Lets try it!
 
-<a href="/pics/lxd-wp/pic2.png" target="_blank"><img src="/pics/lxd-wp/pic2.png"></a>
+<a href="pics/lxd-wp/pic2.png" target="_blank"><img src="pics/lxd-wp/pic2.png"></a>
 
 ### It Works!
 
 now lets get through the initial setup
 
-<a href="/pics/lxd-wp/pic3.png" target="_blank"><img src="/pics/lxd-wp/pic3.png"></a>
-<a href="/pics/lxd-wp/pic4.png" target="_blank"><img src="/pics/lxd-wp/pic4.png"></a>
+<a href="pics/lxd-wp/pic3.png" target="_blank"><img src="pics/lxd-wp/pic3.png"></a>
+<a href="pics/lxd-wp/pic4.png" target="_blank"><img src="pics/lxd-wp/pic4.png"></a>
 > ↑ Here we must enter the user and password exactly like we specified them in MariaDB before
 
-<a href="/pics/lxd-wp/pic5.png" target="_blank"><img src="/pics/lxd-wp/pic5.png"></a>
-<a href="/pics/lxd-wp/pic6.png" target="_blank"><img src="/pics/lxd-wp/pic6.png"></a>
-<a href="/pics/lxd-wp/pic7.png" target="_blank"><img src="/pics/lxd-wp/pic7.png"></a>
+<a href="pics/lxd-wp/pic5.png" target="_blank"><img src="pics/lxd-wp/pic5.png"></a>
+<a href="pics/lxd-wp/pic6.png" target="_blank"><img src="pics/lxd-wp/pic6.png"></a>
+<a href="pics/lxd-wp/pic7.png" target="_blank"><img src="pics/lxd-wp/pic7.png"></a>
 > ↑ We can see that the site is up and running
 
 * * *
