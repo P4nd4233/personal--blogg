@@ -94,7 +94,7 @@ $ find / -name database.php 2>/dev/null
 
 <a href="pics/ignite/pic1.png" target="_blank"><img src="pics/ignite/pic1.png"></a>
 
-I have found root creds in the file and got the flag ...
+I have found root creds in the file. Now lets check for credential reuse. And I am root, lets get the flag ...
 
 ```
 'username' => 'root',
