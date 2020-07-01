@@ -124,7 +124,7 @@ And we can see that indeed the changes had been done.
 <a href="pics/ansible-intro/pic1.png" target="_blank"><img src="pics/ansible-intro/pic1.png"></a>
 
 
-## Lets take a look at something more complicated – Deploying docker Nginx image on multiple machines
+## Lets take a look at something more complicated – Deploying Docker Nginx image on multiple machines
 
 > All the files used at this article will be available at my <a href="https://github.com/P4nd4233/automation" target="_blank">GitHub Repo</a> for the automation articles.
 
