@@ -126,7 +126,7 @@ And we can see that indeed the changes had been done.
 
 ## Lets take a look at something more complicated – Deploying docker Nginx image on multiple machines
 
-> All the files used at this article will be available at my <a href="https://github.com/P4nd4233/automation" target="_blank">GitHub Repo for the automation article</a>.
+> All the files used at this article will be available at my <a href="https://github.com/P4nd4233/automation" target="_blank">GitHub Repo</a> for the automation articles.
 
 #### This script is very CentOS/RedHad specific, because i am running CentOS Environment.
 

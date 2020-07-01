@@ -11,7 +11,7 @@ I have written a little script, which automates the installation of LAMP and Wor
 > It has at least 1 disadvantage – many hardcoded parameters, like mySQL DB credentials!
 > If you are going to use it – Please change any hardcoded values …
 
-<a href="https://github.com/P4nd4233/automation" target="_blank"> You can find this script at my Git Hub Repository for the automation articles</a>
+You can find this script at my <a href="https://github.com/P4nd4233/automation" target="_blank">Git Hub Repository</a> for the automation articles
 `sudo bash lamp-wordpress.sh`
 
 ```
