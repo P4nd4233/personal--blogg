@@ -4,6 +4,12 @@ layout: default
 
 * * *
 
+## [[BASH] Scripting installation of LAMP stack and WordPress](./lamp-wp.html)
+I have written a little script, which automates the installation of LAMP and WordPress on Ubuntu 20.04.
+* * *
+## [Automating infrastructure deployment using Ansible](./ansible-intro.html)
+We are going to take a look at infrastructure deployment automation with Ansible. Such mechanisms are widely used in DevOps and many other scenarios.
+* * *
 ## [WordPress containerization solution with LXD](./lxd-wordpress.html)
 We are going to take a look at Linux Containers, and using LXD for hosting a site with CMS (In this case a WordPress instance).
 * * *
