@@ -2,11 +2,11 @@
 layout: default
 ---
 
-# [BASH] Scripting installation of LAMP stack and WordPress
+# [BASH] Scripting installation of LAMP stack and WordPress from Ground 0
 
 * * *
 
-### I have written a little script, which automates the installation of LAMP and WordPress on Ubuntu 20.04.
+### I have written a little script, which automates the installation of LAMP and WordPress on Ubuntu 20.04 (clean install).
 You can find this script at my <a href="https://github.com/P4nd4233/automation" target="_blank">Git Hub Repository</a> for the automation articles.
 
 > The Script takes the following parameters:
@@ -14,7 +14,7 @@ You can find this script at my <a href="https://github.com/P4nd4233/automation" 
 > * -u = WP_USERNAME in MySQL DB
 > * -p = WP_PASSWORD in MySQL DB
 >
-> This script definitely is not for production use, it is just a quick example of some bash coding. <br>
+> <strong>This script definitely is not for production use, it is just a quick example of some bash coding.</strong> <br>
 > Be aware that it overwrites some files. <br>
 > The script creates a log for `mysql_secure_installation` at `/root/mysql-log.txt` .<br>
 > You should run the script with root privileges, because it does package installation, configuration modifications, etc ...

@@ -4,7 +4,7 @@ layout: default
 
 * * *
 
-## [[BASH] Scripting installation of LAMP stack and WordPress](./lamp-wp.html)
+## [[BASH] Scripting installation of LAMP stack and WordPress from Ground 0](./lamp-wp.html)
 I have written a little script, which automates the installation of LAMP and WordPress on Ubuntu 20.04.
 * * *
 ## [Automating infrastructure deployment using Ansible](./ansible-intro.html)
