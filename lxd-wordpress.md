@@ -294,9 +294,9 @@ systemctl restart apache2
 
 Now we should create a database for WordPress
 
-```bash
-$ mariadb -u root
+`$ mariadb -u root`
 
+```sql
 create database wordpress default character set utf8mb4 collate utf8mb4_unicode_520_ci;
 
 grant all on wordpress.* to 'wordpress_user'@'apache.lxd' identified by 'wordpress_pass';

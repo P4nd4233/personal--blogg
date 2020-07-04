@@ -21,7 +21,7 @@ You can find this script at my <a href="https://github.com/P4nd4233/automation" 
 
 ## For example, you can run:
 
-`sudo bash lamp-wordpress.sh -m SecUre123 -u wp_user -p wp_pass`
+`$ sudo bash lamp-wordpress.sh -m SecUre123 -u wp_user -p wp_pass`
 
 ## The Code itself:
 
