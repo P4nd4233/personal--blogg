@@ -264,7 +264,7 @@ then `systemctl restart mariadb`
 
 > We can attach a volume to the container's `/var/www/html` directory, because if something goes wrong and we have to delete the container, the WordPress installation will stay intact. In my case I will not do that, but it is a good practice.
 
-```
+```bash
 apt-get install wget unzip -y
 wget https://bg.wordpress.org/latest-bg_BG.zip
 unzip latest-bg_BG.zip
