@@ -73,7 +73,7 @@ I googled FuelCMS Database Configuration and found out [this article](https://ww
 They were talking about the MySQL DB, and I assume the app needs to talk with the DB, to do so it need to get authenticated with the DB using some kind of credentials...
 I have read that the configuration file is stored in app/config/database.php. <br>
 At first i couldn't find it, so i ran a quick `find`.
-```
+```bash
 $ find / -name database.php 2>/dev/null
 /var/www/html/fuel/application/config/database.php
 ```

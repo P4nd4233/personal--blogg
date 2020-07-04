@@ -32,7 +32,7 @@ Playbooks are written in <i>YAML</i>.
 Here we can see an anatomy of a Playbook, which will install Apache Web Server on list of host computers and change it’s default homepage to the host name of the computer.
 
 
-```
+```yaml
 ---
 
 - hosts: web-server
@@ -91,7 +91,7 @@ It is a good practice to use only 1 style of typing.
 
 ### Lets run the script
 
-```
+```bash
 $ ansible-playbook playbook1.yaml -K
 BECOME password: 
 
@@ -131,7 +131,7 @@ And we can see that indeed the changes had been done.
 #### This script is very CentOS/RedHad specific, because i am running CentOS Environment.
 
 `docker-nginx.yaml`
-```
+```yaml
 ---
 
 - hosts: docker-servers
@@ -199,7 +199,7 @@ To run the playbook we will run `ansible-playbook /home/ivan/docker-nginx.yaml -
 
 `-K` - will ask for us the sudo password.
 
-```
+```bash
 $ ansible-playbook docker-nginx.yaml -K
 BECOME password: ***********
 
@@ -281,6 +281,6 @@ So I have hosted the site’s contents inside a web directory, and we run `wget`
 
 we basically run the following shell command
 
-```
+```bash
 docker run --name nginx_container -d -v /home/ivan/site:/usr/share/nginx/html:ro -p 8080:80 nginx:latest
 ```

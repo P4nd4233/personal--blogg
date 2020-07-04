@@ -28,19 +28,19 @@ This container will handle the backend (WordPress) database
 * * *
 OK, with the topology taken care of, lets proceed with the installation.<br>
 To install lxd run: 
-```
+```bash
 $ sudo apt-get install lxd -y
 ```
 If you get prompted, choose the latest version. <br>
 Make sure that you are part of the `lxd` group,
-```
+```bash
 $ id
 uid=1000(ivan) gid=1000(ivan) groups=1000(ivan),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),115(lxd)
 ```
 If you are not, run `sudo usermod -aG lxd $USER` <br>
 Ok now we have to initialize LXD for the first time
 
-```
+```bash
 $ sudo lxd init
 Would you like to use LXD clustering? (yes/no) [default=no]: no
 Do you want to configure a new storage pool? (yes/no) [default=yes]: yes
@@ -67,7 +67,7 @@ The last option about YAML can be used to create homogeneous enviroment where th
 >Quotas are supported with the directory backend when running on either ext4 or XFS with project quotas enabled at the filesystem level.
 
 OK, now lets checkout the network situation, we saw above that a new adapter (lxdbr0) was created
-```
+```bash
 $ ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -96,17 +96,17 @@ Now lets install the containers themselves.
 Linux Containers is like Docker, in terms of images, there is a centralized repository (in Ubuntu there is specific Canonical Repo too)
 [uk.images.linuxcontainers.org](https://uk.images.linuxcontainers.org/)
 We can check out the website or use the command line. To query the lxc images, type
-```
+```bash
 $ lxc image list images:
 ```
 That way we get a long list of images available, we can add `| grep 'something'` to narrow it down...<br>
 
 We have chosen an image(Ubuntu focal in our case), to fetch it we can either specify the FINGERPRINT or its ALIAS, we will use the fingerprint
-```
+```bash
 $ lxc init images:30c3adc18d77 nginx
 ```
 When the image finishes downloading we can list the available containters
-```
+```bash
 $ lxc ls
 +-------+---------+------+------+-----------+-----------+
 | NAME  |  STATE  | IPV4 | IPV6 |   TYPE    | SNAPSHOTS |
@@ -117,7 +117,7 @@ $ lxc ls
 The container is in STOPPED state,
 lets create the other 2 containers and start them so we can proceed with further setup
 
-```
+```bash
 $ lxc init images:30c3adc18d77 apache # the last arguments is the container local name
 $ lxc init images:30c3adc18d77 mariadb # the last arguments is the container local name
 $ lxc start --all # start all containers
@@ -138,7 +138,7 @@ to install nginx instide the container we must interact with it.
 To do so run `$ lxc exec nginx -- bash`
 Now we get dropped inside a root shell in the container itself.
 To install nginx we run:
-```
+```bash
 apt-get install nginx -y; systemctl enable --now nginx
 ```
 `systemctl enable --now nginx` - start and enable the nginx daemon to autostart at boot
@@ -154,7 +154,7 @@ That is bad, the logging is broken, we access the site from the outside, but it 
 That's because nginx is unaware of the proxy, lets fix that...
 `$ lxc config device set nginx proxy-device proxy_protocol=true`<br>
 and in the container lets edit the nginx configuration file `/etc/nginx/sites-available/default`. We should put the following at the `server { ... }` directive
-```
+```bash
  server {
 		listen  80 proxy_protocol;
 		server_name localhost;
@@ -168,7 +168,7 @@ Now we can run `nginx -t` to test the configuration. If everything is ok we can 
 
 Now if we take a look at the access.log we can now see the real client ip address
 
-```
+```bash
 $ lxc exec nginx -- tail -f /var/log/nginx/access.log
 
 ==> /var/log/nginx/access.log <==
@@ -178,7 +178,7 @@ $ lxc exec nginx -- tail -f /var/log/nginx/access.log
 
 Lets install apache2 inside it's container, lets run `apt-get install apache2 -y ; systemctl enable --now apache2`
 Now we have to forward nginx to apache. In nginx container, lets add the following to `/etc/nginx/sites-available/default` inside the `server { ... }` directive
-```
+```bash
 server {
 			listen  80 proxy_protocol;
 			server_name localhost;
@@ -198,7 +198,7 @@ server {
 >Because we are attached to the LXD bridge, the internal DNS service will resolve the container's hostname. We will use that, instead you can set static IP for each container.
 
 Now if we browse to the host ip we will see the deafult apache page, however the logs for apache are not set for proxy, lets do that
-```
+```apacheconf
 $ vim /etc/apache2/apache2.conf
 
 LogFormat "%v:%p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined
@@ -211,7 +211,7 @@ Change the %h on line `213` and `214` to %a
 
 and lets add `RemoteIPHeader` and `RemoteIPInternalProxy` (the last 2 lines from bellow) to `/etc/apache2/sites-available/000-default.conf`
 
-```
+```apacheconf
 <VirtualHost *:80>
         ServerAdmin webmaster@localhost
         DocumentRoot /var/www/html
@@ -228,7 +228,7 @@ and last run `a2enmod remoteip; systemctl restart apache2`
 
 We can check out the logs and see that both apache and nginx are logging information correctly
 
-```
+```bash
 $ lxc exec nginx -- tail -f /var/log/nginx/access.log /var/log/nginx/error.log
 
 ==> /var/log/nginx/access.log <==
@@ -238,7 +238,7 @@ $ lxc exec nginx -- tail -f /var/log/nginx/access.log /var/log/nginx/error.log
 172.16.1.20 - - [25/Jun/2020:22:08:52 +0000] "GET / HTTP/1.1" 200 10918 "-" "curl/7.65.3"
 172.16.1.20 - - [25/Jun/2020:22:08:53 +0000] "GET / HTTP/1.1" 200 10918 "-" "curl/7.65.3"
 ```
-```
+```bash
 $ lxc exec apache -- tail -f /var/log/apache2/access.log /var/log/apache2/error.log
 
 ==> /var/log/apache2/access.log <==
@@ -247,7 +247,7 @@ fd42:a868:c39b:3ff9:216:3eff:fed7:7b24 - - [25/Jun/2020:22:08:52 +0000] "GET / H
 ```
 * * *
 ### Done with the proxy, now lets configure MariaDB
-```
+```bash
 lxc exec mariadb -- bash
 apt-get install mariadb-server -y
 mysql_secure_installation # always make sure to run that to remove any default values
@@ -276,7 +276,7 @@ apt-get install -y php-curl php-gd php-mbstring php-xml php-xmlrpc php-soap php-
 Lets change the document root in Apache to the WordPress directory, and also allow permalinks for WordPress.
 Edit `/etc/apache2/sites-available/000-default.conf`
 
-```
+```apacheconf
 DocumentRoot /var/www/html/wordpress
 
 <Directory /var/www/html/wordpress>
@@ -285,7 +285,7 @@ DocumentRoot /var/www/html/wordpress
 ```
 Then run:
 
-```
+```bash
 a2enmod rewrite
 systemctl restart apache2
 ```
@@ -294,7 +294,7 @@ systemctl restart apache2
 
 Now we should create a database for WordPress
 
-```
+```bash
 $ mariadb -u root
 
 create database wordpress default character set utf8mb4 collate utf8mb4_unicode_520_ci;
