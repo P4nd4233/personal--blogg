@@ -4,6 +4,9 @@ layout: default
 
 * * *
 
+## [Blog CTF Walkthrough ](./blog-ctf.html)
+This room is about simple reverse engineering, weak credentials and some WordPress RCE.
+* * *
 ## [[BASH] Scripting installation of LAMP stack and WordPress from Ground 0](./lamp-wp.html)
 I have written a little script, which automates the installation of LAMP and WordPress on Ubuntu 20.04.
 * * *
