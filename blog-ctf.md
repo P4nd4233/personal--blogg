@@ -161,7 +161,7 @@ You've found yourself in a rabbit hole, friend.
 <a href="pics/blog-ctf/blog-home.png" target="_blank"><img src="pics/blog-ctf/blog-home.png"></a>
 
 We can see that it is a standard WordPress blog.
-We can see 2 post from different people so based on that, potentually 2 WordPress users:
+We can see 2 post from different people so based on that, potentially 2 WordPress users:
 ```
 wp users
 ====
@@ -227,7 +227,7 @@ define('DB_PASSWORD', 'LittleYellowLamp90!@');
 ```
 Which are for the WordPress account of `bjoel`, but not for the box user.
 
-Lets see what check out the home directory. It only contains `bjoel` folder with `user.txt` and a PDF file. <br>
+Lets check out the home directory. It only contains `bjoel` folder with `user.txt` and a PDF file. <br>
 Here is the catch - user.txt is not the flag - the file says:
 ```
 You won't find what you're looking for here..
@@ -341,7 +341,7 @@ So definetly not a standard executable, lets reverse engineer it with <a href="h
 
 <a href="pics/blog-ctf/checker-decompiled.png" target="_blank"><img src="pics/blog-ctf/checker-decompiled.png"></a>
 
-So the code is pretty straigth forward, basically it checks if there is an enviroment vairable with named `admin`. If there is it drops you into a root shell.
+So the code is pretty straigth forward, basically it checks if there is an enviroment vairable with name `admin`. If there is, it drops you into a root shell.
 
 Lets create our variable and execute it again.
 
@@ -354,7 +354,7 @@ uid=0(root) gid=33(www-data) groups=33(www-data)
 
 ### Rooted!
 
-Now lets get the root and user flag (it was a hint here too, because in THM they were asking for root.txt first).
+Now lets get the root and user flag (there was a hint here too, because in THM they were asking for `root.txt` first).
 
 ```
 cat /root/root.txt
