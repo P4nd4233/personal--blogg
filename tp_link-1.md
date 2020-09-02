@@ -12,7 +12,7 @@ In many companies in 2020 there is still very big number of old networking hardw
 
 > "<strong><a href="https://www.csoonline.com/article/3124937/73-of-companies-using-vulnerable-end-of-life-networking-devices.html" target="blank">73% of companies using vulnerable end-of-life networking devices</a></strong>"
 
-This is a big risk, because if not maintained properly, old hardware contains software bugs, and vulnerabilities. Because many of these old products are already end of life, there are no updates available from the manufacturer. Also the productivity goes downhill, because of the slower speed that they support and older standards. <br>
+This is a big risk, because if not maintained properly, old hardware contains software bugs, and vulnerabilities. Because many of these old products are already end of life, there are no updates available from the manufacturer. Also the productivity goes downhill, because of the slower speed that they support and also the older standards that they were build for. <br>
 To modernize the networking equipment can mean a lot of expenses and hustle to buy new one, and taking the network down creates inconveniences.
 People are going with the saying "If it works, don't touch it, it will break", that is dangerous way of thinking, because stuff always break, thats how it was build, this is how the modern consumerism works.
 
@@ -27,7 +27,7 @@ I will focus only on 3 things here, more likely representing the environment in 
 
 ### 1) The main Wireless Router
 
-If you router is old and outdated model, you should consider updating it. This is the gateway between the Internal/External Network (the other name for router is Gateway). One - it can malfunction and cut you from the Internet, or give you false sense of security. You should think about it as your front door, you don't want it to be flimsy and all rusted, since everyone can get inside and steal the things in your office, this is the same thing. Think about it, nowadays not everyone works with paper documents, and if he/she does, from where these documents come from? Yes somebody types them inside Microsoft Word, or gets a PDF and prints them out. So if someone gets a hold of the contents of your computer, he/she will get these documents you work with too ...
+If your router is old and outdated model, you should consider updating it. This is the gateway between the Internal/External Network (the other name for router is Gateway). One - it can malfunction and cut you from the Internet, or give you false sense of security. You should think about it as your front door, you don't want it to be flimsy and all rusted, since everyone can get inside and steal the things in your office, this is the same thing. Think about it, nowadays not everyone works with paper documents, and if he/she does, from where these documents come from? Yes somebody types them inside Microsoft Word, or gets a PDF and prints them out. So if someone gets a hold of the contents of your computer, he/she will get these documents you work with too ...
 
 Here i can type all day why you should keep everything up to date, and patch and patch and check,and use reliable equipment, BUT i think it will have more effect if i demonstrate it in my lab, so you can see yourself.
 
