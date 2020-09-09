@@ -60,8 +60,8 @@ In our case that is not an option since the latest firmware was released back in
 So if we can use that type of interface to interact with the device on a level that is not possible other way. It gives us access that only the Manufacturer/Developer was intended to have. And in our case we want exactly that.
 There are many videos online covering exactly what we can do, and how we do it.
 
-Because you don't want to brick your hardware, since you are installing something that is custom, always a good practice is having a backup plan if something goes wrong. 
-If the wifi and lan does not respond and something goes wrong during the upgrade process, and for further use of the router, it is good to have alternative interface option. We will use the router's built in UART serial console <a href="https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter" target="_blank">[1]</a>. By doing this you can get direct access to the router's bootloader and flash firmware this way. More on that can be found on "Debricking" on the OpenWRT site.<a href="https://openwrt.org/toh/tp-link/tl-wr740n" target="blank">[2]</a> In ver 2 of this particular model, it is a little bit quirky, but still works, since most devices have through holes on the PCB, which are very distinguishable, our does not. Although with some googling we can find that there are probe points on the board, which are the RX and TX pins use for the UART communications.
+Because you don't want to brick your hardware, since you are installing something that is custom, always a good practice is having a backup plan, since you don't know what can happen. 
+If the wifi and lan does not respond and something goes wrong during the upgrade process, we can debug the router this way. And for further use of the router, it is good to have alternative interface option. We will use the built in UART serial console <a href="https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter" target="_blank">[1]</a>. By doing this you can get direct access to the router's bootloader and flash firmware this way. More on that can be found on "Debricking" on the OpenWRT site.<a href="https://openwrt.org/toh/tp-link/tl-wr740n" target="blank">[2]</a> In ver 2 of this particular model, it is a little bit quirky, but still works, since most devices have through holes on the PCB, which are very distinguishable, our does not. Although with some googling we can find that there are probe points on the board, which are the RX and TX pins use for the UART communications.
 
 <a href="pics/networking/tplink/tp-link-uart-1.jpg" target="_blank"><img src="pics/networking/tplink/tp-link-uart-1.jpg"></a> <br>
 And if we test with the multimeter, indeed the labeling is correct. <strong>TP4</strong> is <strong>TX</strong> and <strong>TP5</strong> is <strong>RX</strong>.
@@ -69,7 +69,7 @@ And if we test with the multimeter, indeed the labeling is correct. <strong>TP4<
 <a href="pics/networking/tplink/tx-1.png" target="_blank"><img src="pics/networking/tplink/tx-1.png"></a> <br>
 
 So I have soldered 3 wires to these pins, 1 to TX, 1 to RX and 1 to a ground pad. Run the wires out of the case, by breaking the plastic on the bottom, and soldering header pins to the end of the wires, so we can connect them to <a href="https://www.aliexpress.com/wholesale?catId=0&initiative_id=SB_20200831113029&SearchText=usb+uart+adapter" target="_blank">UART-to-USB interface</a>, and get a serial console. <br> 
-> Tip 1: Use different-colored wires for the different pads, if you don't have like me, make sure to label them correctly <br>
+> Tip 1: Use different-colored wires for the different pads, if you don't have, like me, make sure to label them correctly <br>
 > Tip 2: because the connection between the header and the wire is not as structurally strong, i have used super glue and sprinkled some baking soda on top, to make the bonding harden more, and stick the 2 plastic pieces together.
 
 <a href="pics/networking/tplink/uart-2.jpg" target="_blank"><img src="pics/networking/tplink/uart-2.jpg"></a> <br>
@@ -164,8 +164,8 @@ Cheap chinese devices like IP cameras for example, use P2P traffic to be watched
 
 ### 2) Make sure to update your networking equipment firmware, it is part of the system as a whole too.
 
-### 3) If you can, use firewall like pfSense or other solutions, many times router firewalls are just not customizable enough.
-* pfSense for example, can get it's functionality extended, as an Intrusion Detection System (IDS). There are solutions available, and can be natively installed like: `Suricata` or `Snort`. If so, it will <strong> require more processing power</strong>, because of the <strong>real time traffic checks = more expensive hardware.</strong>
+### 3) If you can, use firewall like pfSense or other solutions, many times built-in router firewalls are just not customizable enough.
+* pfSense for example, can get it's functionality extended, as an Intrusion Detection System (IDS). There are solutions available, and can be natively installed like: `Suricata` or `Snort`. If so, it will <strong> require more processing power</strong>, because of the <strong>real time traffic monitoring = more expensive hardware.</strong>
 
 ### 4) Implement a strong password policy.
 * <a href="https://docs.microsoft.com/en-us/microsoft-365/admin/misc/password-policy-recommendations?view=o365-worldwide" target="_blank">This</a> is a good and quick read.
