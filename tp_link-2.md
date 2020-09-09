@@ -19,11 +19,11 @@ Here I am going to show you, how you can modernize your out-of-date router. We w
 > <a href="tp_link-2.html#4">- OpenWRT Installation and initial configuration </a><br>
 
 
-> 3) Video on Best Practices in general (Shown on OpenWRT)
+> 3) Intro to Best Networking Practices in general (some shown on OpenWRT)(<a href="tp_link-2.html#9">summed up variant</a>)
 >  - <a href="tp_link-2.html#5">Guest only WiFi network </a> <br>
->  - VLANs <br>
->  - Strong Password Policy <br>
->  - WPA Enterprise <br>
+>  - <a href="tp_link-2.html#6">WPA Enterprise</a> <br>
+>  - <a href="tp_link-2.html#7"> VLANs </a><br>
+>  - <a href="tp_link-2.html#8">DMZ</a> <br>
 
 <div id="1"></div>
 
@@ -101,6 +101,74 @@ Since the article will become too long, and I do know that is boring, and you wa
 
 
 <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/453652697?color=ff9933&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+
+<div id="6"></div>
+
+## WPA-Enterprise
+
+"WPA-Enterprise (WPA-802.1x, RADIUS):
+This mode provides the security needed for wireless networks in business environments. It is more complicated to set up, and it offers individualized and centralized control over access to your Wi-Fi network. When users try to connect to the network, they need to present their login credentials.
+This mode supports 802.1x RADIUS(Remote Authentication Dial-in User Service) authentication and is appropriate in the cases where a RADIUS server is deployed. WPA-Enterprise should only be used when a RADIUS server is connected for client authentication.<br>
+Users never deal with the actual encryption keys. They are securely created and assigned per user session in the background after a user presents their login credentials. This prevents people from getting the network key from computers." - <a href="https://www.tp-link.com/us/support/faq/500/" target="_blank">Source: TP-Link FAQ</a>
+
+I am willing to show you how to set it up, but unfortunately the TP-Link WR740N is too old and hasn't got enough space to install `wpad`, which is the full version of the package that supports WPA-802.1x authentication(`wpad-mini` currently installed). As I said, some of those enterprise level features to be used require a little bit more modern hardware.
+
+<div id="7"></div>
+
+## Introduction to VLANs
+"VLANs (Virtual LANs) are logical grouping of devices in the same broadcast domain. VLANs are usually configured on switches by placing some interfaces into one broadcast domain and some interfaces into another. Each VLAN acts as a subgroup of the switch ports in an Ethernet LAN.
+
+A VLAN acts like a physical LAN, but it allows hosts to be grouped together in the same broadcast domain even if they are not connected to the same switch. Here are the main reasons why VLANs are used:
+
+* VLANs increase the number of broadcast domains while decreasing their size.
+* VLANs reduce security risks by reducing the number of hosts that receive copies of frames that the switches flood.
+* you can keep hosts that hold sensitive data on a separate VLAN to improve security.
+* you can create more flexible network designs that group users by department instead of by physical location.
+* network changes are achieved with ease by just configuring a port into the appropriate VLAN.
+
+Without VLANs, a broadcast sent from host A would reach all devices on the network. Each device will receive and process broadcast frames, increasing the CPU overhead on each device and reducing the overall security of the network.
+
+By placing interfaces on both switches into a separate VLAN, a broadcast from host A would reach only devices inside the same VLAN, since each VLAN is a separate broadcast domain. Hosts in other VLANs will not even be aware that the communication took place.
+" - <a href="https://study-ccna.com/what-is-a-vlan/" target="_blank">Source: Study-CCNA.com</a>
+
+This is a quick intro into VLANs by Study-CCNA.com. A technology from the 80's which makes your network: <strong> organized, cleaner, easier to manage, faster and more secure.</strong> It is just a must in an enterprise environment.
+
+<div id="8"></div>
+
+## VLAN based DMZ
+
+### What is DMZ ?
+"In computer security, a DMZ or demilitarized zone (sometimes referred to as a perimeter network or screened subnet) is a physical or logical subnetwork that contains and exposes an organization's external-facing services to an untrusted, usually larger, network such as the Internet. The purpose of a DMZ is to add an additional layer of security to an organization's local area network (LAN): an external network node can access only what is exposed in the DMZ, while the rest of the organization's network is firewalled. The DMZ functions as a small, isolated network positioned between the Internet and the private network .
+The name is from the term "demilitarized zone", an area between states in which military operations are not permitted. " - <a href="https://en.wikipedia.org/wiki/DMZ_(computing)" target="_blank">Source: Wikipedia.org</a>
+
+Basically it is a way of dividing the Public accessible services on your network, like your web server or mail server and the rest of the Local Area Network(LAN), so if the servers get compromised, the local network, will be isolated by design.
+
+<div id="9"></div>
+
+## <u>Best Practices</u>
+### 1) Network Segmentation
+* Don't create, too many VLANs since it becomes very hard to manage these networks. Don't overcomplicate things, the goal is to make an organized and secure network.
+
+#### a) Separate VLANs for IOT Devices
+#### <u>Trust, but verify</u>
+Cheap chinese devices like IP cameras for example, use P2P traffic to be watched online, outside of the LAN. Peer2Peer traffic is hard to block. It has the ability to penetrate firewalls, by design. Make sure what your devices are doing. Use `Wireshark` and check what connections are established and what protocols are being used.
+#### b) Separate DMZ(can be VLAN based too) for publicly exposed resources
+* This means the Exposed host cannot access the internal network, or if needed to* , doing it in a filtered, restricted fashion.<br>
+*<strong>Example:</strong> The web-server accessing a MySQL Database which is on the LAN, we should only port-forward the MySQL port to the DMZ VLAN and make sure the FireWall is configured correctly. The firewall becomes a single point of failure in this case. <br>
+*It is recommended to add an web application firewall (WAF) between the database and the server in DMZ.
+<br><br>
+* A <strong> DMZ host is NOT a proper DMZ configuration</strong>, since it is on intranet(LAN), but it is not firewalled, a.k.a this makes things even worse! Be very careful if you use "DMZ host".
+
+#### c) Create separate network(VLAN) for the guests and all untrusted devices. They don't need to have access to the internal internal services (AD DS for example), they just need an Internet connection.
+
+### 2) Make sure to update your networking equipment firmware, it is part of the system as a whole too.
+
+### 3) If you can, use firewall like pfSense or other solutions, many times router firewalls are just not customizable enough.
+* pfSense for example, can get it's functionality extended, as an Intrusion Detection System (IDS). There are solutions available, and can be natively installed like: `Suricata` or `Snort`. If so, it will <strong> require more processing power</strong>, because of the <strong>real time traffic checks = more expensive hardware.</strong>
+
+### 4) Implement a strong password policy.
+* <a href="https://docs.microsoft.com/en-us/microsoft-365/admin/misc/password-policy-recommendations?view=o365-worldwide" target="_blank">This</a> is a good and quick read.
 
 
 ## Conclusion
