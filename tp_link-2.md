@@ -156,7 +156,7 @@ Cheap chinese devices like IP cameras for example, use P2P traffic to be watched
 #### b) Separate DMZ(can be VLAN based too) for publicly exposed resources
 * This means the Exposed host cannot access the internal network, or if needed to* , doing it in a filtered, restricted fashion.<br>
 *<strong>Example:</strong> The web-server accessing a MySQL Database which is on the LAN, we should only port-forward the MySQL port to the DMZ VLAN and make sure the FireWall is configured correctly. The firewall becomes a single point of failure in this case. <br>
-*It is recommended to add an web application firewall (WAF) between the database and the server in DMZ.
+*It is recommended to use an web application firewall (WAF), for better application layer(7) security.
 <br><br>
 * A <strong> DMZ host is NOT a proper DMZ configuration</strong>, since it is on intranet(LAN), but it is not firewalled, a.k.a this makes things even worse! Be very careful if you use "DMZ host".
 
