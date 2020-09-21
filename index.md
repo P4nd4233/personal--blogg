@@ -4,6 +4,9 @@ layout: default
 
 * * *
 
+## [ [TUTORIAL] Setting up a VPN for Personal Needs/Remote Work](./vpn-tut.html)
+I will take a look at configuring the most popular VPN solutions for Personal and Enterprise use.
+
 ## [ [PART 2] Renovating an old network for nearly free](./tp_link-2.html)
 In Part 1 I have tested and explained what dangers and inconveniences poses, old embedded hardware. And how a badly organized network is a big problem.
 * * *
