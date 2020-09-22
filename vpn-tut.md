@@ -49,25 +49,38 @@ layout: default
 
 ## Setting up OpenVPN - Access Server - <a href="https://www.youtube.com/watch?v=ZEEL4I1S4TQ" target="_blank"> Video</a>
 
+<br>
 <div class="video-container">
 	<iframe width="1280" height="720" src="https://www.youtube.com/embed/ZEEL4I1S4TQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
-
+<br><br>
+<a href="/pics/vpn/topology-1.png" target="_blank"><img src="/pics/vpn/topology-1.png"></a>
+<center><i>Network topology of the OpenVPN Labs</i></center>
+<br>
 This is the System Administrator's Guide for OpenVPN Access Server <a href="https://openvpn.net/images/pdf/OpenVPN_Access_Server_Sysadmin_Guide_Rev.pdf" target="_blank">[PDF]</a> .<br>
 Comparison between OpenVPN Access Server and Community Edition<a href="https://openvpn.net/open-source-vs-openvpn-access-server/" target="_blank"> [1]</a> .<br>
+<br>
 
 ## Setting up OpenVPN - Community Edition - <a href="https://www.youtube.com/watch?v=MdN22Oy_Tsg" target="_blank"> Video</a>
 
+<br>
 <div class="video-container">
 	<iframe width="1280" height="720" src="https://www.youtube.com/embed/MdN22Oy_Tsg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
+<br>
 
 ## Setting up Remote Access Role on Windows Server 2019 - VPN only - SSTP - <a href="https://www.youtube.com/watch?v=t0Ib_XmGmWI" target="_blank"> Video</a>
 
+<br>
 <div class="video-container">
 	<iframe width="1280" height="720" src="https://www.youtube.com/embed/t0Ib_XmGmWI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
-<i>Note:</i> If you get an error that Routing and Remote Access Service couldn't start (Error 8007042a), make sure: <br>
+<br><br>
+<a href="/pics/vpn/topology-2.png" target="_blank"><img src="/pics/vpn/topology-2.png"></a>
+<center><i>Network topology of the Windows Server Lab</i></center>
+<br>
+
+<i>Note:</i> If you get an error that Routing and Remote Access Service couldn't start <strong>(Error 8007042a)</strong>, make sure: <br>
 1) Your server is patched <br>
-2) Services may be starting in a wrong order. If you stop NPS service, and then try to start the RRAS service, it should start and automatically trigger NPS to start as well. <br>
+2) Services may be starting in wrong order. If you stop NPS service, and then try to start the RRAS service, it should start and automatically trigger NPS to start as well. <br>
